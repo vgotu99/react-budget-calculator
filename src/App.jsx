@@ -9,6 +9,29 @@ const App = () => {
     { id: 2, charge: "교통비", amount: 400 },
     { id: 3, charge: "식비", amount: 1200 },
   ]);
+  const [charge, setCharge] = useState("");
+  const [amount, setAmount] = useState();
+
+  const handleCharge = e => {
+    setCharge(e.target.value);
+  };
+
+  const handleAmount = e => {
+    setAmount(e.target.valueAsNumber);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if(charge !== '' && amount > 0) {
+      const newExpense = {id: crypto.randomUUID(), charge, amount}
+      const newExpenses = [...expenses, newExpense]
+      setExpenses(newExpenses)
+      setCharge('')
+      setAmount('')
+    } else {
+      console.error('error')
+    }
+  }
 
   const handleDelete = (id) => {
     const newExpenses = expenses.filter((expense) => expense.id !== id);
@@ -19,7 +42,7 @@ const App = () => {
     <main className="main-container">
       <h1>예산 계산기</h1>
       <div style={{ width: "100%", backgroundColor: "white", padding: "1rem" }}>
-        <ExpenseForm />
+        <ExpenseForm handleCharge={handleCharge} charge={charge} handleAmount={handleAmount} amount={amount} handleSubmit={handleSubmit} />
       </div>
       <div style={{ width: "100%", backgroundColor: "white", padding: "1rem" }}>
         <ExpenseList initialExpenses={expenses} handleDelete={handleDelete} />
